@@ -1,6 +1,7 @@
 package api_rest_mockito.jUnit5.e.Mockito.service.impl;
 
 import api_rest_mockito.jUnit5.e.Mockito.entity.User;
+import api_rest_mockito.jUnit5.e.Mockito.exception.ObjectNotFoundException;
 import api_rest_mockito.jUnit5.e.Mockito.repository.UserRepository;
 import api_rest_mockito.jUnit5.e.Mockito.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByid(Long id) {
         Optional<User> user = userRepository.findById(id);
-        return user.orElse(null);
+        return user.orElseThrow(()-> new ObjectNotFoundException("Objeto não encontrado"));
     }
 }
