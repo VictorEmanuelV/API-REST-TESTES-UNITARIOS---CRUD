@@ -7,6 +7,7 @@ import api_rest_mockito.jUnit5.e.Mockito.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,5 +18,10 @@ public class UserServiceImpl implements UserService {
     public User findByid(Long id) {
         Optional<User> user = userRepository.findById(id);
         return user.orElseThrow(()-> new ObjectNotFoundException("Objeto não encontrado"));
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 }
