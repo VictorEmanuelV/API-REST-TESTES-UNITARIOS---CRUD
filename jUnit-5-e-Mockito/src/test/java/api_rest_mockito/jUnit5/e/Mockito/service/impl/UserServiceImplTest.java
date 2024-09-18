@@ -3,6 +3,7 @@ package api_rest_mockito.jUnit5.e.Mockito.service.impl;
 import api_rest_mockito.jUnit5.e.Mockito.dto.UserDto;
 import api_rest_mockito.jUnit5.e.Mockito.dto.mapper.Mapper;
 import api_rest_mockito.jUnit5.e.Mockito.entity.User;
+import api_rest_mockito.jUnit5.e.Mockito.exception.DataIntegratyViolationException;
 import api_rest_mockito.jUnit5.e.Mockito.exception.ObjectNotFoundException;
 import api_rest_mockito.jUnit5.e.Mockito.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -13,11 +14,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class UserServiceImplTest {
     public static final Long ID = 1L;
@@ -26,6 +25,7 @@ class UserServiceImplTest {
     public static final String PASSWORD = "123";
     public static final String MESSAGE = "Objeto não encontrado";
     public static final int INDEX = 0;
+    public static final String JA_CADASTRADO_NO_SISTEMA = "Email ja cadastrado no Sistema.";
     @Mock
     private UserRepository userRepository;
     @InjectMocks
@@ -96,6 +96,16 @@ class UserServiceImplTest {
         Assertions.assertEquals(PASSWORD,response.getPassword());
     }
 
+    @Test
+    void whenCreateThenReturnDataIntegratyViolationException(){
+        Mockito.when(userRepository.findByEmail(Mockito.any())).thenReturn(optionalUser);
+        try {
+            userService.create(userDto);
+        }catch (Exception ex){
+            Assertions.assertEquals(DataIntegratyViolationException.class,ex.getClass());
+            Assertions.assertEquals(JA_CADASTRADO_NO_SISTEMA,ex.getMessage());
+        }
+    }
     @Test
     void update() {
     }
