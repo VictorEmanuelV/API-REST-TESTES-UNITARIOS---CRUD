@@ -25,6 +25,7 @@ class UserServiceImplTest {
     public static final String EMAIL = "Victor@gmail.com";
     public static final String PASSWORD = "123";
     public static final String MESSAGE = "Objeto não encontrado";
+    public static final int INDEX = 0;
     @Mock
     private UserRepository userRepository;
     @InjectMocks
@@ -72,17 +73,27 @@ class UserServiceImplTest {
         List<User> response = userService.findAll();
 
         Assertions.assertNotNull(response);
-        Assertions.assertEquals(User.class,response.get(0).getClass());
+        Assertions.assertEquals(User.class,response.get(INDEX).getClass());
         Assertions.assertEquals(1,response.size());
 
-        Assertions.assertEquals(ID,response.get(0).getId());
-        Assertions.assertEquals(NAME,response.get(0).getName());
-        Assertions.assertEquals(EMAIL,response.get(0).getEmail());
-        Assertions.assertEquals(PASSWORD,response.get(0).getPassword());
+        Assertions.assertEquals(ID,response.get(INDEX).getId());
+        Assertions.assertEquals(NAME,response.get(INDEX).getName());
+        Assertions.assertEquals(EMAIL,response.get(INDEX).getEmail());
+        Assertions.assertEquals(PASSWORD,response.get(INDEX).getPassword());
     }
 
     @Test
-    void create() {
+    void whenCreateThenReturnUser() {
+        Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
+
+        User response = userService.create(userDto);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(User.class,response.getClass());
+        Assertions.assertEquals(ID,response.getId());
+        Assertions.assertEquals(NAME,response.getName());
+        Assertions.assertEquals(EMAIL,response.getEmail());
+        Assertions.assertEquals(PASSWORD,response.getPassword());
     }
 
     @Test
