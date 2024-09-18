@@ -1,15 +1,12 @@
 package api_rest_mockito.jUnit5.e.Mockito.controller;
 import api_rest_mockito.jUnit5.e.Mockito.dto.UserDto;
 import api_rest_mockito.jUnit5.e.Mockito.dto.mapper.Mapper;
-import api_rest_mockito.jUnit5.e.Mockito.dto.mapper.MapperImpl;
 import api_rest_mockito.jUnit5.e.Mockito.entity.User;
 import api_rest_mockito.jUnit5.e.Mockito.service.UserService;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.net.URI;
 import java.util.List;
 
@@ -39,5 +36,15 @@ public class UserController {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(user.getId()).toUri();
 
         return ResponseEntity.created(uri).build();
+    }
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UserDto> updateById(@PathVariable Long id,@RequestBody UserDto dto){
+        User user  = userService.update(dto,id);
+        return ResponseEntity.ok().body(mapper.toDto(user));
+    }
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<UserDto> delete(@PathVariable Long id){
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
