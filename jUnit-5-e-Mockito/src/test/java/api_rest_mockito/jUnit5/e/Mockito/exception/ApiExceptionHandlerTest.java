@@ -12,13 +12,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class ApiExceptionHandlerTest {
 
+    public static final String MESSAGE = "Objeto não econtrado";
+    public static final String JA_CADASTRADO = "Email ja cadastrado";
     @InjectMocks
     private ApiExceptionHandler apiExceptionHandler;
     @Test
     void whenObjectNotFoundT() {
         ResponseEntity<StandardError> response
                 = apiExceptionHandler.objectNotFound
-                (new ObjectNotFoundException("Objeto não econtrado"),new MockHttpServletRequest());
+                (new ObjectNotFoundException(MESSAGE),new MockHttpServletRequest());
 
         Assertions.assertNotNull(response);
         Assertions.assertNotNull(response.getBody());
@@ -26,11 +28,23 @@ class ApiExceptionHandlerTest {
 
         Assertions.assertEquals(ResponseEntity.class,response.getClass());
         Assertions.assertEquals(StandardError.class,response.getBody().getClass());
-        Assertions.assertEquals("Objeto não econtrado",response.getBody().getError());
+        Assertions.assertEquals(MESSAGE,response.getBody().getError());
         Assertions.assertEquals(404,response.getBody().getStatus());
     }
 
     @Test
-    void dataIntegratyViolationException() {
+    void whenDataIntegrityViolationException() {
+        ResponseEntity<StandardError> response
+                = apiExceptionHandler.dataIntegratyViolationException
+                (new DataIntegratyViolationException
+                        (JA_CADASTRADO),new MockHttpServletRequest());
+
+        Assertions.assertNotNull(response);
+        Assertions.assertNotNull(response.getBody());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
+        Assertions.assertEquals(ResponseEntity.class,response.getClass());
+        Assertions.assertEquals(StandardError.class,response.getBody().getClass());
+        Assertions.assertEquals(JA_CADASTRADO,response.getBody().getError());
+        Assertions.assertEquals(400,response.getBody().getStatus());
     }
 }
