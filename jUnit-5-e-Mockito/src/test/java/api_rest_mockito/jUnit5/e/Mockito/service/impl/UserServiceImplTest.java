@@ -98,7 +98,8 @@ class UserServiceImplTest {
 
     @Test
     void whenCreateThenReturnDataIntegratyViolationException(){
-        Mockito.when(userRepository.findByEmail(Mockito.any())).thenReturn(optionalUser);
+        Mockito.when(userRepository.findByEmail(Mockito.any())).thenThrow
+                (new DataIntegratyViolationException(JA_CADASTRADO_NO_SISTEMA));
         try {
             userService.create(userDto);
         }catch (Exception ex){
@@ -123,7 +124,14 @@ class UserServiceImplTest {
 
     }
     @Test
-    void update() {
+    void whenUpdateThenReturnDataIntegratyViolationException() {
+        Mockito.when(userRepository.save(Mockito.any())).thenThrow(new DataIntegratyViolationException(JA_CADASTRADO_NO_SISTEMA));
+        try {
+            userService.update(userDto,ID);
+        }catch (Exception ex){
+            Assertions.assertEquals(JA_CADASTRADO_NO_SISTEMA,ex.getMessage());
+            Assertions.assertEquals(DataIntegratyViolationException.class,ex.getClass());
+        }
     }
 
     @Test
