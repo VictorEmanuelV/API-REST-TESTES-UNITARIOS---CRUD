@@ -106,6 +106,22 @@ class UserServiceImplTest {
             Assertions.assertEquals(JA_CADASTRADO_NO_SISTEMA,ex.getMessage());
         }
     }
+
+    @Test
+    void whenUpdateThenReturnUser(){
+        Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
+
+        User response = userService.update(userDto,ID);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(ID,response.getId());
+        Assertions.assertEquals(NAME,response.getName());
+        Assertions.assertEquals(EMAIL,response.getEmail());
+        Assertions.assertEquals(PASSWORD,response.getPassword());
+
+
+
+    }
     @Test
     void update() {
     }
