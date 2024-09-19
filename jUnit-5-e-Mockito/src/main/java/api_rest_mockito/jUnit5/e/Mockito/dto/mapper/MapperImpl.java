@@ -27,4 +27,5 @@ public class MapperImpl implements Mapper {
                         (user -> new ModelMapper().map
                                 (user, UserDto.class)).collect(Collectors.toList());
     }
+
 }
